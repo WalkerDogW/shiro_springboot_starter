@@ -21,8 +21,10 @@ public class UserService {
         User user = new User();
         user.setUname(uname);
         user.setNick(uname+"NICK");
-        user.setPwd("J/ms7qTJtqmysekuY8/v1TAS+VKqXdH5sB7ulXZOWho=");//密码明文是123456
-        user.setSalt("wxKYXuTPST5SG0jMQzVPsg==");//加密密码的盐值
+//        IpNajqJOBJN8+9fAD+bMzIZMxU6bDCy6EN1Dp6p6q+w=
+//        "J/ms7qTJtqmysekuY8/v1TAS+VKqXdH5sB7ulXZOWho="
+        user.setPwd("IpNajqJOBJN8+9fAD+bMzIZMxU6bDCy6EN1Dp6p6q+w=");//密码明文是123456
+//        user.setSalt("wxKYXuTPST5SG0jMQzVPsg==");//加密密码的盐值
         user.setUid(new Random().nextLong());//随机分配一个id
         user.setCreated(new Date());
         return user;

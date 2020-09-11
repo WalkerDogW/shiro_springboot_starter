@@ -1,7 +1,6 @@
 package site.javaee.annotation.shiro;
 
 
-
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
@@ -36,28 +35,10 @@ public class CustomRealm extends AuthorizingRealm {
         //设置用于匹配密码的CredentialsMatcher
         HashedCredentialsMatcher hashMatcher = new HashedCredentialsMatcher();
         hashMatcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
-//        hashMatcher.setStoredCredentialsHexEncoded(false);;
+        hashMatcher.setStoredCredentialsHexEncoded(false);
+        ;
         hashMatcher.setHashIterations(1024);
         this.setCredentialsMatcher(hashMatcher);
-    }
-
-
-    //定义如何获取用户的角色和权限的逻辑，给shiro做权限判断
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        //null usernames are invalid
-        if (principals == null) {
-            throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
-        }
-
-        User user = (User) getAvailablePrincipal(principals);
-
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        System.out.println("获取角色信息："+user.getRoles());
-        System.out.println("获取权限信息："+user.getPerms());
-        info.setRoles(user.getRoles());
-        info.setStringPermissions(user.getPerms());
-        return info;
     }
 
     //定义如何获取用户信息的业务逻辑，给shiro做登录
@@ -87,12 +68,32 @@ public class CustomRealm extends AuthorizingRealm {
         userDB.getPerms().addAll(perms);
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userDB, userDB.getPwd(), getName());
-        if (userDB.getSalt() != null) {
-            info.setCredentialsSalt(ByteSource.Util.bytes(userDB.getSalt()));
-        }
+        //盐值解密
+//        if (userDB.getSalt() != null) {
+//            info.setCredentialsSalt(ByteSource.Util.bytes(userDB.getSalt()));
+//        }
 
         return info;
 
     }
+
+    //定义如何获取用户的角色和权限的逻辑，给shiro做权限判断
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        //null usernames are invalid
+        if (principals == null) {
+            throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+        }
+
+        User user = (User) getAvailablePrincipal(principals);
+
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        System.out.println("获取角色信息：" + user.getRoles());
+        System.out.println("获取权限信息：" + user.getPerms());
+        info.setRoles(user.getRoles());
+        info.setStringPermissions(user.getPerms());
+        return info;
+    }
+
 
 }

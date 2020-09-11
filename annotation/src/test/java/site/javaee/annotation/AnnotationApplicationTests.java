@@ -10,8 +10,8 @@ class AnnotationApplicationTests {
 
     @Test
     void contextLoads() {
-        SimpleHash simpleHash = new SimpleHash(Sha256Hash.ALGORITHM_NAME, "123456", null, 1024);
-        System.out.println(simpleHash.toHex().toString());
+        String password =  new SimpleHash("SHA-256","123456",null,1024).toBase64();
+        System.out.println(password);
     }
 
 }
